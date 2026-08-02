@@ -1,7 +1,6 @@
 # To-Do List App
 
-Aplikasi manajemen tugas (CRUD) berbasis PHP 8 + SQLite sebagai portofolio
-teknik untuk mendemonstrasikan praktik pengembangan web modern.
+Aplikasi manajemen tugas (CRUD) berbasis PHP 8 + SQLite.
 
 ## ✨ Fitur
 - ➕ Tambah tugas (validasi input)
