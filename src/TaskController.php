@@ -19,9 +19,10 @@ namespace App;
 
 final class TasskController
 {
-    public function __construct(private TaskRepository $taskRepository,
-    private Session $session,)
-    {
+    public function __construct(
+        private TaskRepository $tasks,
+        private Session $session,
+    ) {
 
     }
 
@@ -34,7 +35,7 @@ final class TasskController
         $tasks = $this->tasks->all($filter);
         $flash = $this->session->consume('flash');
 
-        reqquire __DIR__.'/../views/tasks.php';
+        require __DIR__.'/../views/tasks.php';
     }
 
     /**
