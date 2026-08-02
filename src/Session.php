@@ -47,12 +47,13 @@ final class Session
     }
 
     /**
-     * Mengambil data dari session
+     * Mengambil nilai dari session tanpa menghapusnya (untuk dibaca berulang).
      */
-    public function get(string $key, mixed $default = null): mixed
+    public function get(string $key): mixed
     {
-        return $_SESSION[$key] ?? $default;
+        return $_SESSION[$key] ?? null;
     }
+
 
     /**
      * Menghapus data dari session
@@ -71,4 +72,29 @@ final class Session
         unset($_SESSION[$key]);
         return $value;
     }
+
+
+     /**
+     * Membuat (atau mengambil yang sudah ada) token CSRF untuk session ini,
+     * lalu menyimpannya di session.
+     */
+    public function generateCsrfToken(): string
+    {
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['csrf_token'];
+    }
+
+     /**
+     * Memvalidasi token CSRF yang dikirim dari form POST.
+     * Menggunakan hash_equals agar aman dari timing attack.
+     */
+    public function validateCsrfToken(string $token): bool
+    {
+        return isset($_SESSION['csrf_token'])
+            && hash_equals($_SESSION['csrf_token'], $token);
+    }
+
 }
