@@ -62,9 +62,54 @@ final class TasskController
         $existing = $this->tasks->find($id);
         if($existing === null) {
             $this->session->set('flash', ['type' => 'danger',
-            'message'])
+            'message' => 'Tugas tidak ditemukan.']);
+            $this->redirect('/');
         }
 
+        $title = trim($_POST['title'] ?? '');
+        $description = trim($_POST['description'] ?? '') ?: null;
+
+        if ($title === '') {
+            $this->session->set('flash', ['type' => 'danger' , 'message' => 'Judul tugas tidak boleh kosong. ']);
+            $this->redirect('/');
+        }
+
+        $this->tasks->update($id, $title, $description);
+        $this->session->set('flash', ['type' => 'success', 'message' => 'Tugas berhasil diperbarui.']);
+        $this->redirect('/');
+
+    }
+
+    /**
+     * toggle tugas (pending <-> completed)
+     */
+    public function toggle(int $id): void
+    {
+        $this->tasks->toggleStatus($id);
+        $this->redirect('/');
+    }
+
+    /**
+     * menghapus task berdasarkan id
+     */
+    public function destroy(int $id): void
+    {
+        $deleted = $this->tasks->delete($id);
+
+        $this->session->set('flash', [
+            'type' => $deleted ? 'success' : 'danger',
+            'message' => $deleted ? 'Tugas berhasil dihapus.' : 'Tugas tidak ditemukan.',
+        ]);
+        $this->redirect('/');
+    }
+
+    /**
+     * mengalihkan ke halaman lain
+     */
+    private function redirect(string $url): void
+    {
+        header('Location: ' . $url);
+        exit;
     }
 
 
