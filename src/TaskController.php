@@ -17,7 +17,7 @@ namespace App;
  * 5. Mengarahkan ulang (redirect) ke halaman yang sesuai
  */
 
-final class TasskController
+final class TaskController
 {
     public function __construct(
         private TaskRepository $tasks,
