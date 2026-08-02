@@ -1,3 +1,10 @@
-.env
-vendor/
+# /vendor dihasilkan oleh Composer, tidak perlu dicommit
+/vendor/
+
+# File database & file sementara
+/storage/*.sqlite
 *.log
+.env
+.idea/
+.vscode/
+.DS_Store
