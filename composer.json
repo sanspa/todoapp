@@ -1,0 +1,20 @@
+{
+    "name": "training/todo-app",
+    "description": "Aplikasi To-Do List untuk latihan PHP",
+    "type": "project",
+    "require": {
+        "php": "^8.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Budi S"
+        }
+    ],
+    "minimum-stability": "stable"
+}
