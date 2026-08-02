@@ -21,7 +21,7 @@ final class TasskController
 {
     public function __construct(
         private TaskRepository $tasks,
-        private Session $session,
+        private Session $session
     ) {
 
     }
