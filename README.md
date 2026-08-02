@@ -1,11 +1,29 @@
 # To-Do List App
 
-Aplikasi manajemen tugas sederhana dibangun dengan PHP 8 + SQLite.
-Proyek ini dibuat sebagai portofolio untuk mendemonstrasikan:
-PHP, OOP, PSR-4 autoloading, PDO, dan Git workflow standar industri.
+Aplikasi manajemen tugas (CRUD) berbasis PHP 8 + SQLite sebagai portofolio
+teknik untuk mendemonstrasikan praktik pengembangan web modern.
 
-## Requirements
-- PHP >= 8.2
-- Composer
+## ✨ Fitur
+- ➕ Tambah tugas (validasi input)
+- ✏️ Edit & hapus tugas
+- ✅ Tandai selesai / batalkan
+- 🔍 Filter berdasarkan status
+- ⚠️ Proteksi CSRF & SQL injection safe (PDO prepared statements)
 
-## Instalasi (sedang dikerjakan)
+## 🚀 Cara Menjalankan
+1. `composer install`  (saat dependensi sudah ada)
+2. `cd public && php -S localhost:8000`
+3. Buka `http://localhost:8000`
+
+## 🛠️ Teknologi
+PHP 8.2 · SQLite · Composer (PSR-4) · PDO
+
+## 📁 Struktur
+todo-list-app/
+├── public/       # Front controller (satu-satunya entry point)
+├── src/          # Logika aplikasi (Database, Repository, Controller)
+├── views/        # Template tampilan
+└── storage/      # Database & file runtime
+
+## 📄 Lisensi
+MIT

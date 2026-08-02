@@ -1,7 +1,7 @@
 {
     "livePreviewUseDevServer": true,
     "livePreviewServerURL": "todo-app.test:8443",
-    "livePreviewServerProjectPath": "/",
+    "livePreviewServerProjectPath": "d:/Appfolder/todo-app",
     "livePreviewHotReloadSupported": false,
     "livePreviewFramework": "Custom"
 }
