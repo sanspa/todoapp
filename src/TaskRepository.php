@@ -67,7 +67,7 @@ final class TaskRepository
         $stmt = $this->pdo()->prepare('SELECT * FROM tasks WHERE id = :id');
         $stmt->execute(['id' => $id]);
 
-        $$row = $stmt->fetch();
+        $row = $stmt->fetch();
 
         return $row === false ? null : $row;
     }
@@ -95,7 +95,7 @@ final class TaskRepository
     {
         $stmt = $this->pdo()->prepare(
             "UPDATE tasks
-            SET title = :title, description = :description, update_at = datetime('now')
+            SET title = :title, description = :description, updated_at = datetime('now')
             WHERE id = :id"
         );
         return $stmt->execute([

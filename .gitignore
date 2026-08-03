@@ -1,10 +1,42 @@
-# /vendor dihasilkan oleh Composer, tidak perlu dicommit
+# ===== Dependency / Vendor =====
 /vendor/
 
-# File database & file sementara
-/storage/*.sqlite
-*.log
+# ===== Environment & Konfigurasi Lokal =====
 .env
+.env.*
+!.env.example
+
+# ===== Storage Lokal (database SQLite, logs, cache) =====
+/storage/*.db
+/storage/*.sqlite
+/storage/*.sqlite3
+/storage/logs/
+/storage/cache/
+!storage/.gitkeep
+
+# ===== PHP =====
+# Composer
+composer.lock
+
+# File log
+*.log
+
+# Cache
+.cache/
+
+# ===== IDE & Editor =====
 .idea/
 .vscode/
+*.sublime-project
+*.sublime-workspace
 .DS_Store
+
+# ===== OS =====
+Thumbs.db
+desktop.ini
+
+# ===== Testing / Coverage =====
+/tests/var/
+coverage/
+.phpunit.result.cache
+.phpunit.cache/
