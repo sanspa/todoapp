@@ -32,8 +32,23 @@ final class TaskController
      */
     public function index(?string $filter = null): void
     {
+        // Pastikan filter selalu berupa string yang valid ('all', 'pending', 'completed')
+        $filter = in_array($filter, ['pending', 'completed'], true) ? $filter : 'all';   
+
         $tasks = $this->tasks->all($filter);
         $flash = $this->session->consume('flash');
+        $csrfToken = $this->session->generateCsrfToken();
+
+        $viewData = [
+            'tasks'     => $tasks,
+            'filter'    => $filter,
+            'flash'     => $flash,
+            'csrfToken' => $csrfToken,
+        ];
+
+        extract($viewData, EXTR_SKIP);
+       
+
 
         require __DIR__.'/../views/tasks.php';
     }

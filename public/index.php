@@ -21,8 +21,8 @@ use App\TaskRepository;
 // =====================================================================
 $session = new Session();
 $session->start();
-// DIAGNOSA — hapus nanti
-error_log('SESSION_ID_GENERATE: ' . session_id() . ' | token: ' . $session->get('csrf_token'));
+
+
 
 $db = Database::getInstance();
 $db->migrate();
@@ -42,6 +42,7 @@ $path   = rtrim($path, '/') ?: '/';
 // ============================================================
 if ($method === 'POST') {
     $token = $_POST['_token'] ?? '';
+    echo $token;
 
     if (!$session->validateCsrfToken($token)) {
         http_response_code(419);
