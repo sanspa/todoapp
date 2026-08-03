@@ -20,11 +20,16 @@ use PDO;
 
 final class TaskRepository
 {
-    private PDO $pdo;
+    
 
-    public function __construct(Database $database)
+    public function __construct(private Database $database)
     {
-        $this->pdo = $database->getPDO();
+        
+    }
+
+    private function pdo(): PDO
+    {
+        return $this->database->getPDO();
     }
 
     /**
@@ -33,15 +38,24 @@ final class TaskRepository
      */
     public function all(?string $filter = null):array
     {
-        $sql = 'SELECT * FROM tasks';
-        //Hanya teraapkan filter jika nilainya valid (bukan null dan bukan string kosong)
-        if($filter === 'pending' || $filter === 'completed'){
-            $stmt = $this->pdo->prepare($sql . ' WHERE status = :status ORDER BY id DESC');
-            $stmt->execute(['status' => $filter]);
-        } else {
-            $stmt = $this->pdo->query($sql . ' ORDER BY id DESC');
+        if(!in_array($filter,['pending','completed'],true)){
+            $filter = null;
         }
-        return $stmt->fetchAll();
+
+        if($filter === null){
+            $stmt = $this->pdo()->query(
+                'SELECT * FROM tasks ORDER BY 
+                CASE WHEN status = "pending" THEN 0 ELSE 1 END, 
+                id DESC'
+            );
+        } else {
+            $stmt = $this->pdo()->prepare(
+                'SELECT * FROM tasks WHERE status = :status ORDER BY id DESC'
+            );
+            $stmt->execute(['status' => $filter]);
+        }
+        return $stmt->fetchAll();     
+    
         
     }
 
@@ -50,47 +64,46 @@ final class TaskRepository
      */
     public function find(int $id): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM tasks WHERE id = :id LIMIT 1');
+        $stmt = $this->pdo()->prepare('SELECT * FROM tasks WHERE id = :id');
         $stmt->execute(['id' => $id]);
 
-        $task = $stmt->fetch();
+        $$row = $stmt->fetch();
 
-        return $task !== false ? $task : null;
+        return $row === false ? null : $row;
     }
 
     /**
-     * fungsi untuk menambahkan task baru
-     * @return int id task yang baru ditambahkan        
+     * fungsi untuk menambahkan task baru    
      */
-    public function create(string $title, ?string $description = null):int
+    public function create(string $title, ?string $description):bool
     {
-        $stmt = $this->pdo->prepare(
+        $stmt = $this->pdo()->prepare(
             'INSERT INTO tasks (title, description) VALUES (:title, :description)'
         );
-        $stmt->execute([
+        return $stmt->execute([
             'title' => $title,
             'description' => $description,
         ]);
-        return (int) $this->pdo->lastInsertId();  
+        
     }
 
     /**
      * fungsi untuk mengupdate task berdasarkan id
      * @return bool true jika berhasil, false jika gagal    
      */
-    public function update(int $id, string $title, ?string $description = null): bool
+    public function update(int $id, string $title, ?string $description): bool
     {
-        $stmt = $this->pdo->prepare(
+        $stmt = $this->pdo()->prepare(
             "UPDATE tasks
             SET title = :title, description = :description, update_at = datetime('now')
             WHERE id = :id"
         );
-        $stmt->execute([
+        return $stmt->execute([
             'id' => $id,
             'title' => $title,
             'description' => $description,
         ]);
-        return $stmt->rowCount() > 0;
+
     }
 
     /**
@@ -98,23 +111,14 @@ final class TaskRepository
 
      */
 
-    public function toggleStatus(int $id): bool
+    public function toggleStatus(int $id): void
     {
-        $task = $this->find($id);
-        if ($task === null) {
-            return false;
-            
-        }
-        $newStatus = $task['status'] === 'completed' ? 'pending' : 'completed';
-
-        $stmt = $this->pdo->prepare(
-            "UPDATE tasks SET status = :status, update_at = datetime('now') WHERE id = :id"
+       $stmt = $this->pdo()->prepare(
+            "UPDATE tasks SET status = 
+            CASE WHEN status = 'pending' THEN 'completed' ELSE 'pending' END
+            WHERE id = :id"
         );
-        $stmt->execute([
-            'id' => $id,
-            'status' => $newStatus,
-        ]);
-        return $stmt->rowCount() > 0;
+        $stmt->execute(['id' => $id]);
     }
 
     /**
@@ -123,9 +127,8 @@ final class TaskRepository
      */
     public function delete(int $id): bool
     {
-        $stmt = $this->pdo->prepare('DELETE FROM tasks WHERE id = :id');
-        $stmt->execute(['id' => $id]);
-        return $stmt->rowCount() > 0;
+        $stmt = $this->pdo()->prepare('DELETE FROM tasks WHERE id = :id');
+        return $stmt->execute(['id' => $id]);
     }
 
 
