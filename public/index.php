@@ -1,7 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
+
 namespace App;
+
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
 // ============================================================
 // Front Controller — satu-satunya pintu masuk aplikasi.
@@ -42,7 +47,6 @@ $path   = rtrim($path, '/') ?: '/';
 // ============================================================
 if ($method === 'POST') {
     $token = $_POST['_token'] ?? '';
-    echo $token;
 
     if (!$session->validateCsrfToken($token)) {
         http_response_code(419);

@@ -21,7 +21,7 @@ final class TaskController
 {
     public function __construct(
         private TaskRepository $tasks,
-        private Session $session
+        private Session $session,
     ) {
 
     }
@@ -32,8 +32,7 @@ final class TaskController
      */
     public function index(?string $filter = null): void
     {
-        // Pastikan filter selalu berupa string yang valid ('all', 'pending', 'completed')
-        $filter = in_array($filter, ['pending', 'completed'], true) ? $filter : 'all';   
+        $filter = in_array($filter, ['pending', 'completed'], true) ? $filter : 'all';
 
         $tasks = $this->tasks->all($filter);
         $flash = $this->session->consume('flash');
@@ -47,10 +46,7 @@ final class TaskController
         ];
 
         extract($viewData, EXTR_SKIP);
-       
-
-
-        require __DIR__.'/../views/tasks.php';
+        require __DIR__ . '/../views/tasks.php';
     }
 
     /**
@@ -58,16 +54,22 @@ final class TaskController
      */
     public function store(): void
     {
-        $title = trim($_POST['description'] ?? '')?: null;
+        $title = trim($_POST['title'] ?? '');
+        $description = trim($_POST['description'] ?? '') ?: null;
 
-        //Validasi: judul wajib diisi, maksimal 255 karakter
-        if($title === ''){
-            $this->session->set('flash', [
-                'type' => 'success',
-                'message' => 'Tugas berhasil ditambahkan.',
-            ]);
+        if ($title === '') {
+            $this->session->set('flash', ['type' => 'danger', 'message' => 'Judul tugas tidak boleh kosong.']);
             $this->redirect('/');
         }
+
+        if (mb_strlen($title) > 255) {
+            $this->session->set('flash', ['type' => 'danger', 'message' => 'Judul tugas maksimal 255 karakter.']);
+            $this->redirect('/');
+        }
+
+        $this->tasks->create($title, $description);
+        $this->session->set('flash', ['type' => 'success', 'message' => 'Tugas berhasil ditambahkan.']);
+        $this->redirect('/');
     }
 
     /**
