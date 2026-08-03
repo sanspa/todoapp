@@ -32,7 +32,8 @@ $session->start();
 $db = Database::getInstance();
 $db->migrate();
 
-$repo = new TaskRepository($db);
+$pdo = Database::getInstance()->getPdo();
+$repo = new TaskRepository($pdo);
 $controller = new TaskController($repo, $session);
 
 // ============================================================
