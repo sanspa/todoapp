@@ -83,7 +83,7 @@ Buka `http://localhost:8000` di browser.
 ```bash
 composer test
 ```
-
+OK (10 tests, 16 assertions)
 ---
 
 ## ✅ Fitur
