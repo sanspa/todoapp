@@ -36,6 +36,7 @@ final class Session
             'samesite' => 'Lax',   
         ]);
         session_start();
+        
     }
 
     /**

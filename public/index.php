@@ -21,6 +21,8 @@ use App\TaskRepository;
 // =====================================================================
 $session = new Session();
 $session->start();
+// DIAGNOSA — hapus nanti
+error_log('SESSION_ID_GENERATE: ' . session_id() . ' | token: ' . $session->get('csrf_token'));
 
 $db = Database::getInstance();
 $db->migrate();

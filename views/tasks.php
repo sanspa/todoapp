@@ -1,9 +1,7 @@
 <?php
 // views/tasks.php — View untuk menampilkan daftar tugas
 // Data tersedia: $tasks (array), $filter (string), $flash (array|null)
-declare(strict_types=1);
 
-namespace App;
 ?>
 <!DOCTYPE html>
 <html lang="id">
